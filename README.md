@@ -1,7 +1,7 @@
 # # The Fabric Wars
 ### NVSwitch · NVLink · UALink · Ultra Ethernet
 
-Companion repository to the [Fabric Wars article](YOUR_SUBSTACK_URL) published on Substack.**
+Companion repository to the [Fabric Wars article](YOUR_SUBSTACK_URL) published on Substack.
 
 Interactive visual explainer + hands-on PyCUDA code demonstrating how GPU interconnect actually works — from the crossbar ASIC to Unified Virtual Addressing — with measured bandwidth comparisons you can run yourself.
 
