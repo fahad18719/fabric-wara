@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Fabric Wars — Visual Explainer · Fahad Najam Consulting</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --ink:    #0d0d10;
+  --paper:  #f7f6f2;
+  --rule:   #ddd9cf;
+  --navy:   #1a3a5c;
+  --signal: #e84c30;
+  --green:  #2a7a4f;
+  --purple: #5a3e8a;
+  --gold:   #c9962a;
+  --dim:    #7a7670;
+  --mono:   'IBM Plex Mono', monospace;
+  --serif:  'Playfair Display', Georgia, serif;
+  --sans:   'Inter', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── LAYOUT ── */
+.page { max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
+
+.masthead {
+  border-bottom: 2px solid var(--ink);
+  padding: 16px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0;
+}
+.masthead-brand { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); }
+.masthead-tag   { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--signal); }
+
+/* ── SECTION HEADERS ── */
+.section {
+  margin-top: 72px;
+}
+.section-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--signal);
+  margin-bottom: 10px;
+}
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--navy);
+  margin-bottom: 14px;
+  border-bottom: 2px solid var(--navy);
+  padding-bottom: 10px;
+}
+.section-sub {
+  font-size: 15px;
+  color: var(--dim);
+  max-width: 640px;
+  margin-bottom: 36px;
+}
+
+/* ── VIZ CARDS ── */
+.viz-card {
+  background: var(--ink);
+  border-radius: 4px;
+  padding: 32px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  position: relative;
+}
+.viz-card-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+  margin-bottom: 20px;
+}
+
+/* ── CONTROLS ── */
+.controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.btn {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border: 1px solid rgba(255,255,255,.25);
+  background: transparent;
+  color: rgba(255,255,255,.6);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all .2s;
+}
+.btn:hover, .btn.active {
+  background: var(--signal);
+  border-color: var(--signal);
+  color: #fff;
+}
+.btn.green:hover, .btn.green.active  { background: var(--green); border-color: var(--green); }
+.btn.purple:hover, .btn.purple.active { background: var(--purple); border-color: var(--purple); }
+
+/* ── CAPTION ── */
+.caption {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--dim);
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+  line-height: 1.6;
+}
+
+/* ── COMPARISON GRID ── */
+.comp-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  margin-top: 12px;
+}
+.comp-col {
+  background: var(--ink);
+  padding: 22px 18px;
+  border-radius: 2px;
+}
+.comp-col.ua { background: #0d1f14; }
+.comp-col.eth { background: #12091e; }
+.comp-col-head {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid;
+}
+.comp-col .comp-col-head { color: #7eb3e8; border-color: var(--navy); }
+.comp-col.ua .comp-col-head { color: #6fcf97; border-color: var(--green); }
+.comp-col.eth .comp-col-head { color: #c39bff; border-color: var(--purple); }
+.comp-row {
+  margin-bottom: 14px;
+}
+.comp-row-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.3);
+  margin-bottom: 3px;
+}
+.comp-row-val {
+  font-size: 13px;
+  color: rgba(255,255,255,.85);
+  line-height: 1.4;
+}
+.comp-row-val.big {
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+}
+.tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 2px;
+  margin-top: 4px;
+}
+.tag.prod { background: var(--signal); color: #fff; }
+.tag.spec { background: var(--gold); color: #000; }
+.tag.ship { background: var(--green); color: #fff; }
+
+/* ── FOOTER ── */
+.footer-bar {
+  max-width: 960px;
+  margin: 60px auto 0;
+  padding: 24px 24px;
+  border-top: 2px solid var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-bar span {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+@media (max-width: 600px) {
+  .comp-grid { grid-template-columns: 1fr; }
+  .viz-card { padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+<div class="masthead">
+  <span class="masthead-brand">Fahad Najam Consulting · Silicon &amp; Soul</span>
+  <span class="masthead-tag">Visual Explainer · GPU Interconnect</span>
+</div>
+
+<!-- ════════════════════════════════════════════
+     VISUAL 1: CROSSBAR ANATOMY
+════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-eyebrow">Visual 01 — The Core Primitive</div>
+  <div class="section-title">What a Crossbar Actually Is</div>
+  <div class="section-sub">Click any GPU pair to watch data route through the intersection grid. Multiple pairs can transfer simultaneously — that's the non-blocking guarantee.</div>
+
+  <div class="viz-card">
+    <div class="viz-card-label">NVSwitch Crossbar Matrix — Interactive</div>
+    <div class="controls" id="xbar-controls">
+      <button class="btn active" onclick="setCrossbarMode('free')">Free Select</button>
+      <button class="btn" onclick="setCrossbarMode('all')">All-to-All Burst</button>
+      <button class="btn" onclick="setCrossbarMode('reset')">Reset</button>
+    </div>
+    <canvas id="crossbarCanvas" width="860" height="480" style="width:100%;height:auto;display:block;"></canvas>
+  </div>
+  <div class="caption">
+    A crossbar is an N×N grid of switch points in silicon. Every row is a sender, every column is a receiver. When GPU 3 sends to GPU 7, only that intersection opens — every other pair continues unaffected. This is why NVSwitch is "non-blocking": there is no shared bottleneck. The wire between GPUs and the chip is high-speed copper on the PCB baseboard. Inside the chip, it's metal traces on silicon.
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     VISUAL 2: NVSwitch GENERATION EVOLUTION
+════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-eyebrow">Visual 02 — Generation by Generation</div>
+  <div class="section-title">NVSwitch: How the Crossbar Scaled</div>
+  <div class="section-sub">From 18 ports at 25 GB/s in 2018 to 72 ports at 200 GB/s in 2024. The crossbar topology stayed the same. The scale exploded.</div>
+
+  <div class="viz-card">
+    <div class="viz-card-label">Bandwidth Evolution · NVSwitch 1.0 → 4.0</div>
+    <div class="controls">
+      <button class="btn active" id="gen-btn-1" onclick="showGen(1)">V100 / 2018</button>
+      <button class="btn" id="gen-btn-2" onclick="showGen(2)">A100 / 2020</button>
+      <button class="btn" id="gen-btn-3" onclick="showGen(3)">H100 / 2022</button>
+      <button class="btn" id="gen-btn-4" onclick="showGen(4)">B200 NVL72 / 2024</button>
+    </div>
+    <canvas id="genCanvas" width="860" height="380" style="width:100%;height:auto;display:block;"></canvas>
+  </div>
+  <div class="caption" id="gen-caption">
+    NVSwitch 1.0 (V100 / DGX-2) · 18 NVLink 2.0 ports · 25 GB/s per port · 900 GB/s aggregate per chip · 12 chips in DGX-2 system
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     VISUAL 3: NVL72 RACK ANATOMY
+════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-eyebrow">Visual 03 — Rack Scale</div>
+  <div class="section-title">Inside the GB200 NVL72</div>
+  <div class="section-sub">72 GPUs. 9 NVSwitch tray boards. 130 TB/s all-to-all. Hover over each layer to understand what it does.</div>
+
+  <div class="viz-card">
+    <div class="viz-card-label">GB200 NVL72 Rack · Layer Anatomy</div>
+    <canvas id="rackCanvas" width="860" height="520" style="width:100%;height:auto;display:block;cursor:pointer;"></canvas>
+  </div>
+  <div class="caption" id="rack-caption">
+    The NVL72 is a full rack where 36 compute trays (2 B200 GPUs each) are connected by 9 NVSwitch tray boards. Every GPU has 1.8 TB/s NVLink 5.0 bandwidth and can address any other GPU's HBM memory directly — 13.5 TB of unified memory across the rack.
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     VISUAL 4: SCALE-UP vs SCALE-OUT
+════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-eyebrow">Visual 04 — The Two Fabric Jobs</div>
+  <div class="section-title">Scale-Up vs Scale-Out: Different Layers, Different Tools</div>
+  <div class="section-sub">The biggest source of confusion. NVLink/UALink live inside the pod. Ultra Ethernet lives between pods. Neither replaces the other.</div>
+
+  <div class="viz-card">
+    <div class="viz-card-label">Two-Fabric Architecture · Datacenter View</div>
+    <canvas id="fabricCanvas" width="860" height="440" style="width:100%;height:auto;display:block;"></canvas>
+  </div>
+  <div class="caption">
+    Scale-up fabric (NVLink/NVSwitch or UALink) uses load/store memory semantics — GPU-to-GPU feels like accessing local memory. Scale-out fabric (InfiniBand / Ultra Ethernet) uses message-passing — you send a packet, it travels through the network. These are fundamentally different communication models solving fundamentally different problems.
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     VISUAL 5: THREE-WAY COMPARISON
+════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-eyebrow">Visual 05 — Side by Side</div>
+  <div class="section-title">NVLink vs UALink vs Ultra Ethernet</div>
+  <div class="section-sub">Three technologies. Three layers. Three strategic bets on who controls the AI infrastructure stack.</div>
+
+  <div class="comp-grid">
+    <!-- NVLink -->
+    <div class="comp-col">
+      <div class="comp-col-head">NVLink + NVSwitch</div>
+      <div class="comp-row">
+        <div class="comp-row-label">Peak BW / GPU</div>
+        <div class="comp-row-val big">1.8 TB/s</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Cluster Size</div>
+        <div class="comp-row-val">72 GPUs commercial<br/><span style="color:rgba(255,255,255,.4);font-size:12px;">576 theoretical</span></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Memory Model</div>
+        <div class="comp-row-val">Load/Store · NUMA<br/>Cache coherent</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Vendor</div>
+        <div class="comp-row-val">NVIDIA only</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Standard</div>
+        <div class="comp-row-val">Proprietary</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Status</div>
+        <div class="comp-row-val"><span class="tag prod">Production</span></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Wire</div>
+        <div class="comp-row-val">Copper PCB traces (node)<br/>Optical cables (rack)</div>
+      </div>
+    </div>
+    <!-- UALink -->
+    <div class="comp-col ua">
+      <div class="comp-col-head">UALink 1.0</div>
+      <div class="comp-row">
+        <div class="comp-row-label">Peak BW / Port</div>
+        <div class="comp-row-val big">800 Gb/s</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Cluster Size</div>
+        <div class="comp-row-val">1,024 accelerators<br/><span style="color:rgba(255,255,255,.4);font-size:12px;">per pod, spec</span></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Memory Model</div>
+        <div class="comp-row-val">Load/Store · NUMA<br/>Cache coherent</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Vendor</div>
+        <div class="comp-row-val">AMD, Intel,<br/>Astera Labs +</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Standard</div>
+        <div class="comp-row-val">Open consortium<br/>(75+ members)</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Status</div>
+        <div class="comp-row-val"><span class="tag spec">HW late 2026</span></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Wire</div>
+        <div class="comp-row-val">Modified Ethernet SerDes<br/>IEEE P802.3dj</div>
+      </div>
+    </div>
+    <!-- Ultra Ethernet -->
+    <div class="comp-col eth">
+      <div class="comp-col-head">Ultra Ethernet</div>
+      <div class="comp-row">
+        <div class="comp-row-label">Peak BW / Port</div>
+        <div class="comp-row-val big">800 Gb/s</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Scale</div>
+        <div class="comp-row-val">Datacenter-wide<br/><span style="color:rgba(255,255,255,.4);font-size:12px;">thousands of nodes</span></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Memory Model</div>
+        <div class="comp-row-val">Message-passing<br/>Not load/store</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Vendor</div>
+        <div class="comp-row-val">Broadcom, Arista,<br/>Cisco, Intel</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Standard</div>
+        <div class="comp-row-val">Open consortium<br/>(Ultra Ethernet C.)</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Status</div>
+        <div class="comp-row-val"><span class="tag ship">Tomahawk Ultra shipping</span></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-row-label">Wire</div>
+        <div class="comp-row-val">Standard Ethernet PHY<br/>Optical or copper DAC</div>
+      </div>
+    </div>
+  </div>
+  <div class="caption" style="margin-top:14px;">
+    © 2026 Fahad Najam Consulting · Fahad Najam · Silicon &amp; Soul · Infrastructure Intelligence Series
+  </div>
+</div>
+
+</div><!-- /page -->
+
+<div class="footer-bar">
+  <span>© 2026 Fahad Najam Consulting</span>
+  <span>Fahad Najam · Silicon &amp; Soul</span>
+  <span>Infrastructure Intelligence Series</span>
+</div>
+
+<script>
+/* ════════════════════════════════════════
+   VISUAL 1: CROSSBAR CANVAS
+════════════════════════════════════════ */
+const xCanvas = document.getElementById('crossbarCanvas');
+const xCtx = xCanvas.getContext('2d');
+const N = 8; // 8 GPUs
+let activeLinks = [];
+let crossbarMode = 'free';
+let animFrame = 0;
+let allBurstLinks = [];
+let burstActive = false;
+
+// GPU colors
+const GPU_COLORS = [
+  '#e84c30','#e8923a','#e8c930','#6fcf97',
+  '#7eb3e8','#c39bff','#f2a3c0','#a8e6cf'
+];
+const GPU_NAMES = ['GPU 0','GPU 1','GPU 2','GPU 3','GPU 4','GPU 5','GPU 6','GPU 7'];
+
+function drawCrossbar() {
+  const W = xCanvas.width, H = xCanvas.height;
+  xCtx.clearRect(0,0,W,H);
+
+  const pad = 90, cellW = (W - pad*2) / N, cellH = (H - pad*2) / N;
+
+  // Background grid lines (dim)
+  xCtx.strokeStyle = 'rgba(255,255,255,0.06)';
+  xCtx.lineWidth = 1;
+  for(let i=0;i<=N;i++){
+    xCtx.beginPath(); xCtx.moveTo(pad+i*cellW,pad); xCtx.lineTo(pad+i*cellW,pad+N*cellH); xCtx.stroke();
+    xCtx.beginPath(); xCtx.moveTo(pad,pad+i*cellH); xCtx.lineTo(pad+N*cellW,pad+i*cellH); xCtx.stroke();
+  }
+
+  // Draw active connection BEAMS first (behind dots)
+  activeLinks.forEach(link => {
+    const {from, to, progress, color} = link;
+    const x1 = pad + from*cellW + cellW/2;
+    const y1 = pad - 30;
+    const xInt = pad + to*cellW + cellW/2;
+    const yInt = pad + from*cellH + cellH/2;
+    const y2 = pad + from*cellH + cellH/2;
+    const x2 = pad + N*cellW + 30;
+
+    // Horizontal beam along row
+    const alpha = Math.min(1, progress*3);
+    xCtx.save();
+    xCtx.strokeStyle = color;
+    xCtx.globalAlpha = alpha * 0.35;
+    xCtx.lineWidth = cellH * 0.6;
+    xCtx.beginPath();
+    xCtx.moveTo(pad - 30, pad + from*cellH + cellH/2);
+    xCtx.lineTo(pad + to*cellW + cellW/2, pad + from*cellH + cellH/2);
+    xCtx.stroke();
+    // Vertical beam along column
+    xCtx.lineWidth = cellW * 0.6;
+    xCtx.beginPath();
+    xCtx.moveTo(pad + to*cellW + cellW/2, pad + from*cellH + cellH/2);
+    xCtx.lineTo(pad + to*cellW + cellW/2, pad + N*cellH + 30);
+    xCtx.stroke();
+    xCtx.restore();
+  });
+
+  // Active link intersection dots
+  activeLinks.forEach(link => {
+    const {from, to, progress, color} = link;
+    const cx = pad + to*cellW + cellW/2;
+    const cy = pad + from*cellH + cellH/2;
+    const r = Math.min(18, 4 + progress * 18);
+    // Glow
+    const grad = xCtx.createRadialGradient(cx,cy,0,cx,cy,r*2.5);
+    grad.addColorStop(0, color);
+    grad.addColorStop(1, 'transparent');
+    xCtx.save();
+    xCtx.globalAlpha = Math.min(1, progress*2) * 0.7;
+    xCtx.fillStyle = grad;
+    xCtx.beginPath(); xCtx.arc(cx,cy,r*2.5,0,Math.PI*2); xCtx.fill();
+    xCtx.restore();
+    // Core dot
+    xCtx.save();
+    xCtx.globalAlpha = Math.min(1, progress*2);
+    xCtx.fillStyle = color;
+    xCtx.beginPath(); xCtx.arc(cx,cy,r,0,Math.PI*2); xCtx.fill();
+    xCtx.restore();
+
+    // Diagonal "path" label
+    if(progress > 0.5) {
+      xCtx.save();
+      xCtx.globalAlpha = (progress - 0.5) * 2;
+      xCtx.font = `bold 10px ${getComputedStyle(document.body).getPropertyValue('--mono')||'monospace'}`;
+      xCtx.fillStyle = color;
+      xCtx.textAlign = 'center';
+      xCtx.fillText(`G${from}→G${to}`, cx, cy - r - 6);
+      xCtx.restore();
+    }
+  });
+
+  // Grid intersection dots (inactive)
+  for(let r=0;r<N;r++){
+    for(let c=0;c<N;c++){
+      const isActive = activeLinks.some(l=>l.from===r && l.to===c);
+      if(isActive) continue;
+      const cx = pad+c*cellW+cellW/2, cy = pad+r*cellH+cellH/2;
+      xCtx.fillStyle = r===c ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.07)';
+      xCtx.beginPath(); xCtx.arc(cx,cy,3,0,Math.PI*2); xCtx.fill();
+    }
+  }
+
+  // Row labels (SENDERS)
+  xCtx.font = `600 11px Inter, sans-serif`;
+  xCtx.textAlign = 'right';
+  for(let r=0;r<N;r++){
+    const cy = pad + r*cellH + cellH/2;
+    const isActive = activeLinks.some(l=>l.from===r);
+    xCtx.fillStyle = isActive ? GPU_COLORS[r] : 'rgba(255,255,255,0.35)';
+    xCtx.fillText(GPU_NAMES[r], pad-12, cy+4);
+    // Row line from GPU to grid
+    xCtx.strokeStyle = isActive ? GPU_COLORS[r] : 'rgba(255,255,255,0.1)';
+    xCtx.lineWidth = isActive ? 2 : 1;
+    xCtx.globalAlpha = isActive ? 1 : 0.5;
+    xCtx.beginPath(); xCtx.moveTo(pad-10,cy); xCtx.lineTo(pad,cy); xCtx.stroke();
+    xCtx.globalAlpha = 1;
+  }
+
+  // Col labels (RECEIVERS)
+  xCtx.textAlign = 'center';
+  for(let c=0;c<N;c++){
+    const cx = pad + c*cellW + cellW/2;
+    const isActive = activeLinks.some(l=>l.to===c);
+    xCtx.fillStyle = isActive ? GPU_COLORS[c] : 'rgba(255,255,255,0.35)';
+    xCtx.save();
+    xCtx.translate(cx, pad-12);
+    xCtx.rotate(-Math.PI/4);
+    xCtx.fillText(GPU_NAMES[c], 0, 0);
+    xCtx.restore();
+  }
+
+  // Corner label
+  xCtx.fillStyle = 'rgba(255,255,255,0.2)';
+  xCtx.font = `500 10px Inter, sans-serif`;
+  xCtx.textAlign = 'left';
+  xCtx.fillText('SENDER →', 6, pad-8);
+  xCtx.save();
+  xCtx.translate(pad-52, pad+N*cellH/2);
+  xCtx.rotate(-Math.PI/2);
+  xCtx.textAlign = 'center';
+  xCtx.fillText('RECEIVER ↓', 0, 0);
+  xCtx.restore();
+
+  // Bottom label
+  xCtx.fillStyle = 'rgba(255,255,255,0.15)';
+  xCtx.font = `500 11px IBM Plex Mono, monospace`;
+  xCtx.textAlign = 'center';
+  const activeStr = activeLinks.length > 0
+    ? `${activeLinks.length} simultaneous transfer${activeLinks.length>1?'s':''} · non-blocking crossbar`
+    : `Click a row → column intersection to activate a GPU pair`;
+  xCtx.fillText(activeStr, W/2, H-10);
+}
+
+function animateCrossbar() {
+  // Advance progress
+  activeLinks = activeLinks.map(l => ({...l, progress: Math.min(1, l.progress + 0.04)}));
+
+  // All-burst mode: cycle through pairs
+  if(burstActive) {
+    animFrame++;
+    if(animFrame % 28 === 0) {
+      // Add new random pair
+      let from, to;
+      do { from = Math.floor(Math.random()*N); to = Math.floor(Math.random()*N); } while(from===to);
+      const exists = activeLinks.some(l=>l.from===from||l.to===to);
+      if(!exists && activeLinks.length < 4) {
+        activeLinks.push({from, to, progress:0, color: GPU_COLORS[from]});
+      }
+      if(activeLinks.length >= 4) activeLinks.shift();
+    }
+  }
+
+  drawCrossbar();
+  requestAnimationFrame(animateCrossbar);
+}
+
+function setCrossbarMode(mode) {
+  crossbarMode = mode;
+  document.querySelectorAll('#xbar-controls .btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  if(mode==='reset') { activeLinks=[]; burstActive=false; setCrossbarMode('free'); return; }
+  if(mode==='all') { burstActive=true; }
+  else { burstActive=false; }
+}
+
+xCanvas.addEventListener('click', function(e) {
+  if(crossbarMode!=='free') return;
+  const rect = xCanvas.getBoundingClientRect();
+  const scaleX = xCanvas.width / rect.width;
+  const scaleY = xCanvas.height / rect.height;
+  const mx = (e.clientX - rect.left) * scaleX;
+  const my = (e.clientY - rect.top) * scaleY;
+  const pad=90, cellW=(xCanvas.width-pad*2)/N, cellH=(xCanvas.height-pad*2)/N;
+  const col = Math.floor((mx-pad)/cellW);
+  const row = Math.floor((my-pad)/cellH);
+  if(row>=0&&row<N&&col>=0&&col<N&&row!==col){
+    const existing = activeLinks.findIndex(l=>l.from===row&&l.to===col);
+    if(existing>=0) { activeLinks.splice(existing,1); }
+    else {
+      // Remove any existing that conflict
+      activeLinks = activeLinks.filter(l=>l.from!==row&&l.to!==col);
+      activeLinks.push({from:row, to:col, progress:0, color:GPU_COLORS[row]});
+    }
+  }
+});
+
+animateCrossbar();
+
+
+/* ════════════════════════════════════════
+   VISUAL 2: GENERATION CANVAS
+════════════════════════════════════════ */
+const gCanvas = document.getElementById('genCanvas');
+const gCtx = gCanvas.getContext('2d');
+let currentGen = 1;
+let genAnim = 0;
+
+const GENS = [
+  { label:'NVSwitch 1.0', year:'2018 · V100 / DGX-2', ports:18, linkBW:25, aggBW:900, chipCount:12, color:'#7eb3e8', nvlinkGen:'NVLink 2.0', gpus:8, caption:'NVSwitch 1.0 · 18 NVLink 2.0 ports · 25 GB/s per port · 900 GB/s aggregate per chip · 12 chips in DGX-2 system' },
+  { label:'NVSwitch 2.0', year:'2020 · A100', ports:18, linkBW:25, aggBW:600, chipCount:6, color:'#6fcf97', nvlinkGen:'NVLink 3.0', gpus:8, caption:'NVSwitch 2.0 · NVLink 3.0 · 600 GB/s per GPU · 6 chips per HGX baseboard · In-network SHARP collective acceleration introduced' },
+  { label:'NVSwitch 3.0', year:'2022 · H100 / H200', ports:64, linkBW:50, aggBW:900, chipCount:4, color:'#e8c930', nvlinkGen:'NVLink 4.0', gpus:8, caption:'NVSwitch 3.0 · NVLink 4.0 · 50 GB/s per link · 900 GB/s per GPU · 4 chips on HGX baseboard · Powers H100 and H200 systems' },
+  { label:'NVSwitch 4.0', year:'2024 · B200 / NVL72', ports:72, linkBW:200, aggBW:14400, chipCount:18, color:'#e84c30', nvlinkGen:'NVLink 5.0', gpus:72, caption:'NVSwitch 4.0 · NVLink 5.0 · 200 GB/s per port · 14.4 TB/s per chip · 9 tray boards × 2 chips = 130 TB/s rack-wide · 72 GPUs as one memory domain' },
+];
+
+function showGen(n) {
+  currentGen = n-1;
+  genAnim = 0;
+  document.querySelectorAll('[id^="gen-btn-"]').forEach((b,i)=>{
+    b.classList.toggle('active', i===n-1);
+  });
+  document.getElementById('gen-caption').textContent = GENS[n-1].caption;
+}
+
+function drawGen() {
+  const W = gCanvas.width, H = gCanvas.height;
+  gCtx.clearRect(0,0,W,H);
+  const g = GENS[currentGen];
+  genAnim = Math.min(1, genAnim + 0.025);
+
+  // Background
+  gCtx.fillStyle = 'rgba(255,255,255,0.02)';
+  gCtx.fillRect(0,0,W,H);
+
+  // Bar chart showing bandwidth across all gens
+  const barW = 120, barGap = 40;
+  const totalW = GENS.length*(barW+barGap)-barGap;
+  const startX = (W - totalW) / 2;
+  const maxBW = 14400;
+  const chartH = 260, chartY = H - 80;
+
+  // Chart grid
+  [0.25,0.5,0.75,1].forEach(t => {
+    const y = chartY - chartH*t;
+    gCtx.strokeStyle = 'rgba(255,255,255,0.06)';
+    gCtx.lineWidth = 1;
+    gCtx.beginPath(); gCtx.moveTo(startX-20,y); gCtx.lineTo(startX+totalW+20,y); gCtx.stroke();
+    const val = (maxBW*t);
+    gCtx.fillStyle='rgba(255,255,255,0.25)';
+    gCtx.font=`10px IBM Plex Mono,monospace`;
+    gCtx.textAlign='right';
+    gCtx.fillText(val>=1000?`${(val/1000).toFixed(0)} TB/s`:`${val} GB/s`, startX-28, y+4);
+  });
+
+  GENS.forEach((gen, i) => {
+    const x = startX + i*(barW+barGap);
+    const frac = gen.aggBW / maxBW;
+    const bh = chartH * frac * (i===currentGen ? genAnim : 1);
+    const isActive = i === currentGen;
+
+    // Bar
+    gCtx.save();
+    gCtx.globalAlpha = isActive ? 1 : 0.4;
+    const barGrad = gCtx.createLinearGradient(x,chartY-bh,x,chartY);
+    barGrad.addColorStop(0, gen.color);
+    barGrad.addColorStop(1, gen.color+'44');
+    gCtx.fillStyle = barGrad;
+    gCtx.fillRect(x, chartY-bh, barW, bh);
+
+    // Active outline
+    if(isActive) {
+      gCtx.strokeStyle = gen.color;
+      gCtx.lineWidth = 2;
+      gCtx.strokeRect(x, chartY-bh, barW, bh);
+    }
+    gCtx.restore();
+
+    // BW label on top
+    gCtx.save();
+    gCtx.globalAlpha = isActive ? genAnim : 0.5;
+    gCtx.fillStyle = gen.color;
+    gCtx.font = `bold 13px IBM Plex Mono, monospace`;
+    gCtx.textAlign = 'center';
+    const bwLabel = gen.aggBW >= 1000 ? `${(gen.aggBW/1000).toFixed(1)} TB/s` : `${gen.aggBW} GB/s`;
+    gCtx.fillText(bwLabel, x+barW/2, chartY-bh-10);
+    gCtx.restore();
+
+    // Gen label below
+    gCtx.save();
+    gCtx.globalAlpha = isActive ? 1 : 0.5;
+    gCtx.fillStyle = isActive ? gen.color : 'rgba(255,255,255,0.4)';
+    gCtx.font = `${isActive?'600':'400'} 11px Inter, sans-serif`;
+    gCtx.textAlign = 'center';
+    gCtx.fillText(gen.label, x+barW/2, chartY+18);
+    gCtx.fillStyle = 'rgba(255,255,255,0.3)';
+    gCtx.font = `10px IBM Plex Mono, monospace`;
+    gCtx.fillText(gen.year, x+barW/2, chartY+33);
+    gCtx.restore();
+  });
+
+  // Active gen stats panel
+  const panelX = W - 240, panelY = 20;
+  gCtx.save();
+  gCtx.globalAlpha = genAnim;
+  gCtx.fillStyle = 'rgba(255,255,255,0.04)';
+  gCtx.strokeStyle = GENS[currentGen].color;
+  gCtx.lineWidth = 1;
+  gCtx.fillRect(panelX, panelY, 220, 180);
+  gCtx.strokeRect(panelX, panelY, 220, 180);
+
+  const g2 = GENS[currentGen];
+  const stats = [
+    ['NVLink Gen', g2.nvlinkGen],
+    ['Ports', `${g2.ports}`],
+    ['BW / Port', `${g2.linkBW} GB/s`],
+    ['Aggregate', g2.aggBW>=1000?`${(g2.aggBW/1000).toFixed(1)} TB/s`:`${g2.aggBW} GB/s`],
+    ['Chips/System', `${g2.chipCount}`],
+    ['GPU Scale', `${g2.gpus} GPUs`],
+  ];
+  gCtx.font = `600 11px IBM Plex Mono, monospace`;
+  gCtx.fillStyle = g2.color;
+  gCtx.textAlign = 'left';
+  gCtx.fillText(g2.label, panelX+14, panelY+20);
+  stats.forEach(([k,v], i) => {
+    gCtx.fillStyle = 'rgba(255,255,255,0.35)';
+    gCtx.font = `10px IBM Plex Mono, monospace`;
+    gCtx.fillText(k, panelX+14, panelY+42+i*22);
+    gCtx.fillStyle = 'rgba(255,255,255,0.85)';
+    gCtx.font = `600 12px IBM Plex Mono, monospace`;
+    gCtx.textAlign = 'right';
+    gCtx.fillText(v, panelX+206, panelY+42+i*22);
+    gCtx.textAlign = 'left';
+  });
+  gCtx.restore();
+
+  requestAnimationFrame(drawGen);
+}
+drawGen();
+
+
+/* ════════════════════════════════════════
+   VISUAL 3: NVL72 RACK
+════════════════════════════════════════ */
+const rCanvas = document.getElementById('rackCanvas');
+const rCtx = rCanvas.getContext('2d');
+let hoveredLayer = -1;
+let rackAnim = 0;
+
+const RACK_LAYERS = [
+  { label:'TOP-OF-RACK SWITCH', sub:'InfiniBand / Ultra Ethernet · Scale-Out', color:'#5a3e8a', h:52 },
+  { label:'NVSwitch TRAY BOARDS (×9)', sub:'Dual NVSwitch 4.0 chips each · 130 TB/s fabric', color:'#e84c30', h:68 },
+  { label:'COMPUTE TRAYS (×36)', sub:'2× B200 GPUs + Grace CPU each · 1.8 TB/s NVLink 5.0 / GPU', color:'#1a3a5c', h:100 },
+  { label:'HBM MEMORY POOL', sub:'13.5 TB unified across all 72 GPUs · single address space', color:'#2a7a4f', h:56 },
+  { label:'POWER + COOLING', sub:'1,000W per GPU · 120 kW per rack · Liquid cooling mandatory', color:'#c9962a', h:52 },
+];
+
+const RACK_DESCS = [
+  'Top-of-rack switch connects this NVL72 to other racks via InfiniBand or Ultra Ethernet. This is the scale-OUT fabric — message-passing between racks, not load/store memory.',
+  '9 NVSwitch tray boards, each with 2× NVSwitch 4.0 chips. These are the crossbar ASICs — 72 ports each at 200 GB/s. Every GPU plugs into every switch board. This is what makes 72 GPUs non-blocking.',
+  '36 compute trays. Each tray holds 2 B200 GPUs and a Grace CPU arm. Each GPU has 1.8 TB/s NVLink 5.0 bandwidth. The NVLink cables route up to the switch tray boards above.',
+  '72 GPUs × 192 GB HBM3e each = 13.5 TB total. Because all GPUs are connected by NVSwitch with load/store semantics, any GPU can read or write any other GPU\'s HBM directly — like local memory.',
+  '120 kW per rack. 1,000W per GPU. This is why liquid cooling is mandatory — air cannot move this heat. Vertiv and other vendors provide direct liquid cooling to the compute trays.',
+];
+
+function drawRack() {
+  const W = rCanvas.width, H = rCanvas.height;
+  rCtx.clearRect(0,0,W,H);
+  rackAnim = Math.min(1, rackAnim + 0.02);
+
+  const rackW = 340, rackX = 80;
+  const totalH = RACK_LAYERS.reduce((a,l)=>a+l.h+4,0);
+  let yOff = (H - totalH)/2;
+
+  // Rack outline
+  rCtx.strokeStyle = 'rgba(255,255,255,0.12)';
+  rCtx.lineWidth = 2;
+  rCtx.strokeRect(rackX-4, yOff-4, rackW+8, totalH+8);
+
+  // Draw layers
+  RACK_LAYERS.forEach((layer, i) => {
+    const y = yOff;
+    const isHover = hoveredLayer === i;
+    const alpha = rackAnim * (isHover ? 1 : 0.85);
+
+    // Layer fill
+    rCtx.save();
+    rCtx.globalAlpha = alpha;
+    const lg = rCtx.createLinearGradient(rackX,y,rackX+rackW,y);
+    lg.addColorStop(0, layer.color);
+    lg.addColorStop(1, layer.color+'99');
+    rCtx.fillStyle = lg;
+    rCtx.fillRect(rackX, y, rackW, layer.h);
+
+    if(isHover) {
+      rCtx.strokeStyle = '#fff';
+      rCtx.lineWidth = 2;
+      rCtx.strokeRect(rackX, y, rackW, layer.h);
+    }
+    rCtx.restore();
+
+    // Label
+    rCtx.save();
+    rCtx.globalAlpha = Math.min(1, rackAnim * 1.5);
+    rCtx.fillStyle = '#fff';
+    rCtx.font = `700 12px Inter, sans-serif`;
+    rCtx.textAlign = 'left';
+    rCtx.fillText(layer.label, rackX+14, y + layer.h/2 - 6);
+    rCtx.fillStyle = 'rgba(255,255,255,0.6)';
+    rCtx.font = `400 11px Inter, sans-serif`;
+    rCtx.fillText(layer.sub, rackX+14, y + layer.h/2 + 10);
+    rCtx.restore();
+
+    yOff += layer.h + 4;
+  });
+
+  // Right panel — description
+  const pX = rackX + rackW + 40, pY = (H - totalH)/2;
+  if(hoveredLayer >= 0) {
+    rCtx.save();
+    rCtx.fillStyle = 'rgba(255,255,255,0.05)';
+    rCtx.strokeStyle = RACK_LAYERS[hoveredLayer].color;
+    rCtx.lineWidth = 1;
+    const pW = W - pX - 20, pHh = totalH;
+    rCtx.fillRect(pX, pY, pW, pHh);
+    rCtx.strokeRect(pX, pY, pW, pHh);
+
+    // Header
+    rCtx.fillStyle = RACK_LAYERS[hoveredLayer].color;
+    rCtx.font = `700 13px IBM Plex Mono, monospace`;
+    rCtx.textAlign = 'left';
+    rCtx.fillText(RACK_LAYERS[hoveredLayer].label, pX+16, pY+30);
+
+    // Body text — word wrap
+    rCtx.fillStyle = 'rgba(255,255,255,0.75)';
+    rCtx.font = `400 13px Inter, sans-serif`;
+    const words = RACK_DESCS[hoveredLayer].split(' ');
+    let line='', lineY=pY+60, maxW=pW-32;
+    words.forEach(word => {
+      const test = line + word + ' ';
+      if(rCtx.measureText(test).width > maxW && line) {
+        rCtx.fillText(line.trim(), pX+16, lineY);
+        line = word + ' '; lineY += 22;
+      } else { line = test; }
+    });
+    rCtx.fillText(line.trim(), pX+16, lineY);
+    rCtx.restore();
+  } else {
+    rCtx.fillStyle = 'rgba(255,255,255,0.2)';
+    rCtx.font = `italic 13px Inter, sans-serif`;
+    rCtx.textAlign = 'left';
+    rCtx.fillText('← Hover a layer for detail', pX+16, H/2);
+  }
+
+  // Bandwidth flow arrows on right side of rack
+  if(rackAnim > 0.5) {
+    const arrowX = rackX + rackW + 8;
+    const startY2 = (H - totalH)/2 + RACK_LAYERS[0].h + 4;
+    const endY2 = startY2 + RACK_LAYERS[1].h + RACK_LAYERS[2].h + 4;
+    rCtx.save();
+    rCtx.strokeStyle = '#e84c30';
+    rCtx.lineWidth = 2;
+    rCtx.globalAlpha = 0.5;
+    rCtx.beginPath();
+    rCtx.moveTo(arrowX, startY2);
+    rCtx.lineTo(arrowX, endY2);
+    rCtx.stroke();
+    rCtx.fillStyle = '#e84c30';
+    rCtx.font = `bold 9px IBM Plex Mono,monospace`;
+    rCtx.textAlign = 'left';
+    rCtx.save();
+    rCtx.translate(arrowX+4, (startY2+endY2)/2);
+    rCtx.rotate(-Math.PI/2);
+    rCtx.fillText('NVLink 5.0 · 1.8TB/s/GPU', 0, 0);
+    rCtx.restore();
+    rCtx.restore();
+  }
+
+  requestAnimationFrame(drawRack);
+}
+
+// Calculate layer y positions for hover detection
+rCanvas.addEventListener('mousemove', function(e) {
+  const rect = rCanvas.getBoundingClientRect();
+  const scaleY = rCanvas.height / rect.height;
+  const my = (e.clientY - rect.top) * scaleY;
+  const totalH2 = RACK_LAYERS.reduce((a,l)=>a+l.h+4,0);
+  let yOff2 = (rCanvas.height - totalH2)/2;
+  hoveredLayer = -1;
+  RACK_LAYERS.forEach((layer, i) => {
+    if(my >= yOff2 && my <= yOff2 + layer.h) hoveredLayer = i;
+    yOff2 += layer.h + 4;
+  });
+  document.getElementById('rack-caption').textContent = hoveredLayer >= 0 ? RACK_DESCS[hoveredLayer] : 'The NVL72 is a full rack where 36 compute trays (2 B200 GPUs each) are connected by 9 NVSwitch tray boards. Every GPU has 1.8 TB/s NVLink 5.0 bandwidth and can address any other GPU\'s HBM memory directly — 13.5 TB of unified memory across the rack.';
+});
+rCanvas.addEventListener('mouseleave', function() { hoveredLayer=-1; });
+
+drawRack();
+
+
+/* ════════════════════════════════════════
+   VISUAL 4: SCALE-UP vs SCALE-OUT FABRIC
+════════════════════════════════════════ */
+const fCanvas = document.getElementById('fabricCanvas');
+const fCtx = fCanvas.getContext('2d');
+let fabAnim = 0;
+let fabPulse = 0;
+
+function drawFabric() {
+  const W = fCanvas.width, H = fCanvas.height;
+  fCtx.clearRect(0,0,W,H);
+  fabAnim = Math.min(1, fabAnim + 0.015);
+  fabPulse = (fabPulse + 0.03) % (Math.PI*2);
+
+  const podW = 340, podH = 200;
+
+  // ─── POD A (left): NVSwitch Scale-Up ───
+  const podAX = 60, podAY = (H-podH)/2;
+  fCtx.save();
+  fCtx.globalAlpha = fabAnim;
+  fCtx.strokeStyle = '#1a3a5c';
+  fCtx.lineWidth = 2;
+  fCtx.setLineDash([]);
+  fCtx.strokeRect(podAX, podAY, podW, podH);
+  fCtx.fillStyle='rgba(26,58,92,0.15)';
+  fCtx.fillRect(podAX, podAY, podW, podH);
+
+  // 4 GPU nodes in pod A
+  const gpuPositions = [
+    [podAX+60, podAY+50], [podAX+220, podAY+50],
+    [podAX+60, podAY+140], [podAX+220, podAY+140]
+  ];
+  // NVSwitch center
+  const swX = podAX+podW/2, swY = podAY+podH/2;
+
+  // Draw NVSwitch hub
+  const pulse = 0.5 + 0.5*Math.sin(fabPulse);
+  const swR = 22 + pulse*4;
+  const swGrad = fCtx.createRadialGradient(swX,swY,0,swX,swY,swR*2);
+  swGrad.addColorStop(0,'#e84c30');
+  swGrad.addColorStop(1,'transparent');
+  fCtx.fillStyle=swGrad;
+  fCtx.globalAlpha=fabAnim*0.4;
+  fCtx.beginPath(); fCtx.arc(swX,swY,swR*2,0,Math.PI*2); fCtx.fill();
+  fCtx.globalAlpha=fabAnim;
+  fCtx.fillStyle='#e84c30';
+  fCtx.beginPath(); fCtx.arc(swX,swY,swR*0.7,0,Math.PI*2); fCtx.fill();
+  fCtx.fillStyle='#fff';
+  fCtx.font='bold 9px IBM Plex Mono,monospace';
+  fCtx.textAlign='center';
+  fCtx.fillText('NVSwitch',swX,swY-4);
+  fCtx.fillText('Crossbar',swX,swY+7);
+
+  // Lines: GPU → NVSwitch (scale-up, load/store)
+  gpuPositions.forEach(([gx,gy], gi) => {
+    const linePhase = (fabPulse + gi*0.8) % (Math.PI*2);
+    const lineAlpha = 0.4 + 0.35*Math.sin(linePhase);
+    fCtx.strokeStyle='#7eb3e8';
+    fCtx.lineWidth=2;
+    fCtx.globalAlpha=fabAnim*lineAlpha;
+    fCtx.setLineDash([]);
+    fCtx.beginPath(); fCtx.moveTo(gx,gy); fCtx.lineTo(swX,swY); fCtx.stroke();
+
+    // GPU rect
+    fCtx.globalAlpha=fabAnim;
+    fCtx.fillStyle='rgba(26,58,92,0.9)';
+    fCtx.strokeStyle='#7eb3e8';
+    fCtx.lineWidth=1.5;
+    fCtx.fillRect(gx-26,gy-18,52,36);
+    fCtx.strokeRect(gx-26,gy-18,52,36);
+    fCtx.fillStyle='#7eb3e8';
+    fCtx.font='bold 10px Inter,sans-serif';
+    fCtx.textAlign='center';
+    fCtx.fillText(`GPU ${gi}`,gx,gy+4);
+  });
+
+  // Pod A label
+  fCtx.fillStyle='#7eb3e8';
+  fCtx.font='bold 11px IBM Plex Mono,monospace';
+  fCtx.textAlign='center';
+  fCtx.fillText('SCALE-UP FABRIC (NVLink)', podAX+podW/2, podAY-12);
+  fCtx.fillStyle='rgba(255,255,255,0.35)';
+  fCtx.font='10px Inter,sans-serif';
+  fCtx.fillText('Load/Store · Cache Coherent · Sub-µs', podAX+podW/2, podAY-0);
+  fCtx.restore();
+
+  // ─── POD B (right): Same thing ───
+  const podBX = W - 60 - podW, podBY = podAY;
+  fCtx.save();
+  fCtx.globalAlpha = fabAnim;
+  fCtx.strokeStyle = '#2a7a4f';
+  fCtx.lineWidth = 2;
+  fCtx.strokeRect(podBX, podBY, podW, podH);
+  fCtx.fillStyle='rgba(42,122,79,0.1)';
+  fCtx.fillRect(podBX, podBY, podW, podH);
+
+  const gpuBPositions = [
+    [podBX+60, podBY+50], [podBX+220, podBY+50],
+    [podBX+60, podBY+140], [podBX+220, podBY+140]
+  ];
+  const swBX = podBX+podW/2, swBY = podBY+podH/2;
+
+  const swBGrad = fCtx.createRadialGradient(swBX,swBY,0,swBX,swBY,30);
+  swBGrad.addColorStop(0,'#2a7a4f');
+  swBGrad.addColorStop(1,'transparent');
+  fCtx.fillStyle=swBGrad;
+  fCtx.globalAlpha=fabAnim*0.4;
+  fCtx.beginPath(); fCtx.arc(swBX,swBY,44,0,Math.PI*2); fCtx.fill();
+  fCtx.globalAlpha=fabAnim;
+  fCtx.fillStyle='#2a7a4f';
+  fCtx.beginPath(); fCtx.arc(swBX,swBY,16,0,Math.PI*2); fCtx.fill();
+  fCtx.fillStyle='#fff';
+  fCtx.font='bold 9px IBM Plex Mono,monospace';
+  fCtx.textAlign='center';
+  fCtx.fillText('UALink',swBX,swBY-3);
+  fCtx.fillText('Switch',swBX,swBY+8);
+
+  gpuBPositions.forEach(([gx,gy], gi) => {
+    const linePhase = (fabPulse + gi*0.8 + Math.PI) % (Math.PI*2);
+    fCtx.strokeStyle='#6fcf97';
+    fCtx.lineWidth=2;
+    fCtx.globalAlpha=fabAnim*(0.4+0.35*Math.sin(linePhase));
+    fCtx.beginPath(); fCtx.moveTo(gx,gy); fCtx.lineTo(swBX,swBY); fCtx.stroke();
+    fCtx.globalAlpha=fabAnim;
+    fCtx.fillStyle='rgba(42,122,79,0.8)';
+    fCtx.strokeStyle='#6fcf97';
+    fCtx.lineWidth=1.5;
+    fCtx.fillRect(gx-26,gy-18,52,36);
+    fCtx.strokeRect(gx-26,gy-18,52,36);
+    fCtx.fillStyle='#6fcf97';
+    fCtx.font='bold 10px Inter,sans-serif';
+    fCtx.textAlign='center';
+    fCtx.fillText(`GPU ${gi+4}`,gx,gy+4);
+  });
+
+  fCtx.fillStyle='#6fcf97';
+  fCtx.font='bold 11px IBM Plex Mono,monospace';
+  fCtx.textAlign='center';
+  fCtx.fillText('SCALE-UP FABRIC (UALink)', podBX+podW/2, podBY-12);
+  fCtx.fillStyle='rgba(255,255,255,0.35)';
+  fCtx.font='10px Inter,sans-serif';
+  fCtx.fillText('Load/Store · Open Standard · 2026', podBX+podW/2, podBY-0);
+  fCtx.restore();
+
+  // ─── SCALE-OUT BRIDGE ───
+  const bridgeY = H - 52;
+  fCtx.save();
+  fCtx.globalAlpha = fabAnim;
+
+  // Bridge line
+  const bpulse = 0.5 + 0.5*Math.sin(fabPulse*1.5);
+  fCtx.strokeStyle='#c39bff';
+  fCtx.lineWidth=3;
+  fCtx.setLineDash([10,8]);
+  fCtx.beginPath();
+  fCtx.moveTo(podAX+podW/2, podAY+podH+2);
+  fCtx.lineTo(podAX+podW/2, bridgeY);
+  fCtx.lineTo(podBX+podW/2, bridgeY);
+  fCtx.lineTo(podBX+podW/2, podBY+podH+2);
+  fCtx.stroke();
+
+  // Bridge label
+  fCtx.setLineDash([]);
+  fCtx.fillStyle='rgba(90,62,138,0.85)';
+  fCtx.fillRect(W/2-120, bridgeY-16, 240, 32);
+  fCtx.strokeStyle='#c39bff';
+  fCtx.lineWidth=1;
+  fCtx.strokeRect(W/2-120, bridgeY-16, 240, 32);
+  fCtx.fillStyle='#c39bff';
+  fCtx.font='bold 11px IBM Plex Mono,monospace';
+  fCtx.textAlign='center';
+  fCtx.fillText('SCALE-OUT FABRIC · Ultra Ethernet / InfiniBand', W/2, bridgeY+5);
+
+  // Scale-out label
+  fCtx.fillStyle='rgba(255,255,255,0.35)';
+  fCtx.font='10px Inter,sans-serif';
+  fCtx.fillText('Message-Passing · Rack-to-Rack · Datacenter-Wide', W/2, bridgeY+24);
+  fCtx.restore();
+
+  requestAnimationFrame(drawFabric);
+}
+drawFabric();
+</script>
+</body>
+</html>

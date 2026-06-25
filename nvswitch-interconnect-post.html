@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Fabric Wars: NVSwitch, UALink, and the Future of GPU Interconnect</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --ink:       #0f0f12;
+    --paper:     #f7f6f2;
+    --rule:      #d4d0c8;
+    --accent:    #1a3a5c;   /* deep navy — silicon */
+    --signal:    #e84c30;   /* red-orange — live wire, NV heat */
+    --open:      #2a7a4f;   /* green — open standard, UALink */
+    --ghost:     #6b6860;
+    --mono:      'IBM Plex Mono', monospace;
+    --serif:     'Playfair Display', Georgia, serif;
+    --sans:      'Inter', system-ui, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.72;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── MASTHEAD ─── */
+  .masthead {
+    border-bottom: 2px solid var(--ink);
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .masthead-brand {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ghost);
+  }
+  .masthead-series {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--signal);
+    text-transform: uppercase;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 72px 40px 48px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(32px, 5vw, 54px);
+    line-height: 1.12;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-sub {
+    font-size: 19px;
+    color: var(--ghost);
+    line-height: 1.5;
+    max-width: 640px;
+    margin-bottom: 32px;
+  }
+  .hero-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--ghost);
+    text-transform: uppercase;
+    border-top: 1px solid var(--rule);
+    padding-top: 18px;
+  }
+
+  /* ─── BODY ─── */
+  .body-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  .body-wrap p {
+    margin-bottom: 22px;
+    font-size: 17px;
+    color: var(--ink);
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 700;
+    margin: 52px 0 16px;
+    color: var(--accent);
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 8px;
+  }
+
+  h3 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ghost);
+    margin: 36px 0 12px;
+  }
+
+  /* ─── PULL QUOTE ─── */
+  .pull {
+    border-left: 4px solid var(--signal);
+    margin: 40px 0;
+    padding: 20px 28px;
+    background: rgba(232,76,48,0.04);
+  }
+  .pull p {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  /* ─── STAT ROW ─── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 2px;
+    border: 1px solid var(--rule);
+    margin: 36px 0;
+  }
+  .stat-cell {
+    padding: 22px 20px;
+    border: 1px solid var(--rule);
+  }
+  .stat-cell .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ghost);
+    margin-bottom: 8px;
+  }
+  .stat-cell .value {
+    font-family: var(--mono);
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-cell .note {
+    font-size: 12px;
+    color: var(--ghost);
+  }
+
+  /* ─── COMPARISON TABLE ─── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 32px 0;
+  }
+  .compare-table th {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 12px 14px;
+    text-align: left;
+  }
+  .compare-table th.col-nv  { background: var(--accent); }
+  .compare-table th.col-ua  { background: var(--open); }
+  .compare-table th.col-eth { background: #5a3e8a; }
+
+  .compare-table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .compare-table tr:nth-child(even) td { background: rgba(0,0,0,0.025); }
+  .compare-table td:first-child {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--ghost);
+    white-space: nowrap;
+  }
+
+  /* ─── ARCHITECTURE DIAGRAM ─── */
+  .diagram {
+    background: var(--ink);
+    color: #a8e6cf;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.6;
+    padding: 32px 28px;
+    border-radius: 2px;
+    overflow-x: auto;
+    margin: 36px 0;
+    white-space: pre;
+  }
+  .diagram .dim   { color: #555a6e; }
+  .diagram .hi    { color: #e8c97a; }
+  .diagram .red   { color: var(--signal); }
+  .diagram .green { color: #6fcf97; }
+  .diagram .blue  { color: #7eb3e8; }
+
+  /* ─── LAYER CARD ─── */
+  .layer-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 32px 0;
+  }
+  .layer-card {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 0;
+    border: 1px solid var(--rule);
+  }
+  .layer-label {
+    background: var(--accent);
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+  }
+  .layer-card.open .layer-label  { background: var(--open); }
+  .layer-card.eth  .layer-label  { background: #5a3e8a; }
+  .layer-card.warn .layer-label  { background: #b45309; }
+  .layer-body {
+    padding: 14px 18px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .layer-body strong { font-weight: 600; }
+
+  /* ─── TIMELINE ─── */
+  .timeline {
+    margin: 32px 0;
+    padding-left: 24px;
+    border-left: 2px solid var(--rule);
+  }
+  .tl-item {
+    margin-bottom: 28px;
+    position: relative;
+    padding-left: 20px;
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -29px;
+    top: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--paper);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+  .tl-item.open::before  { background: var(--open); box-shadow: 0 0 0 1px var(--open); }
+  .tl-item.signal::before { background: var(--signal); box-shadow: 0 0 0 1px var(--signal); }
+  .tl-year {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--ghost);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .tl-title {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  .tl-body {
+    font-size: 14px;
+    color: var(--ghost);
+  }
+
+  /* ─── CALLOUT ─── */
+  .callout {
+    background: rgba(26,58,92,0.07);
+    border: 1px solid rgba(26,58,92,0.2);
+    border-radius: 2px;
+    padding: 22px 24px;
+    margin: 36px 0;
+  }
+  .callout .cl-head {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .callout p {
+    font-size: 15px;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 40px;
+    border-top: 2px solid var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .footer-left {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ghost);
+    line-height: 1.8;
+  }
+  .footer-right {
+    font-size: 13px;
+    color: var(--ghost);
+    max-width: 320px;
+    line-height: 1.55;
+  }
+
+  strong.nv  { color: var(--accent); }
+  strong.ua  { color: var(--open); }
+  strong.eth { color: #5a3e8a; }
+
+  @media (max-width: 600px) {
+    .masthead, .hero, .body-wrap, .footer { padding-left: 20px; padding-right: 20px; }
+    .layer-card { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 30px; }
+    .compare-table { font-size: 12px; }
+    .stat-cell .value { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <span class="masthead-brand">Fahad Najam Consulting · Silicon &amp; Soul</span>
+  <span class="masthead-series">Infrastructure Intelligence Series</span>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">Deep Dive · GPU Interconnect</div>
+  <h1>The Fabric Wars:<br/><em>NVSwitch, NVLink,<br/>UALink &amp; Ultra Ethernet</em></h1>
+  <p class="hero-sub">
+    Inside the switching silicon that makes 72-GPU racks think as one — and the open-standard coalition trying to break NVIDIA's grip on the scale-up fabric.
+  </p>
+  <div class="hero-meta">
+    By Fahad Najam &nbsp;·&nbsp; June 2026 &nbsp;·&nbsp; © 2026 Fahad Najam Consulting
+  </div>
+</section>
+
+<div class="body-wrap">
+
+  <p>
+    Every time a transformer layer synchronizes gradients across hundreds of GPUs, two things happen invisibly fast: the compute you planned for — and the data movement you didn't budget for. The fabric connecting those GPUs either multiplies your throughput or becomes the ceiling you can't break through. This is the story of that fabric.
+  </p>
+
+  <div class="pull">
+    <p>"NVIDIA didn't just sell better GPUs. They sold a switching architecture that made every GPU feel like local memory. That's the moat."</p>
+  </div>
+
+  <h2>Part I — NVSwitch: The Crossbar That Changed Everything</h2>
+
+  <h3>What NVSwitch Actually Is</h3>
+  <p>
+    Most engineers know NVLink as the fast lane between two GPUs. Fewer understand that NVLink alone doesn't scale — it's a point-to-point protocol. Connecting 8 GPUs in a full mesh without a switch would require 7 direct links per GPU. That's physically unworkable. <strong class="nv">NVSwitch solves this</strong> by inserting a dedicated crossbar switching ASIC between every GPU, making the topology a software abstraction rather than a physical wiring constraint.
+  </p>
+
+  <div class="stat-row">
+    <div class="stat-cell">
+      <div class="label">NVSwitch Internal</div>
+      <div class="value">18×18</div>
+      <div class="note">fully-connected crossbar, non-blocking at full NVLink speed</div>
+    </div>
+    <div class="stat-cell">
+      <div class="label">NVSwitch 3.0 BW</div>
+      <div class="value">900 GB/s</div>
+      <div class="note">aggregate bi-directional per chip (H100 era)</div>
+    </div>
+    <div class="stat-cell">
+      <div class="label">NVSwitch 4.0 BW</div>
+      <div class="value">14.4 TB/s</div>
+      <div class="note">per chip, GB200 NVL72 era (72 ports × 200 GB/s)</div>
+    </div>
+    <div class="stat-cell">
+      <div class="label">NVL72 Total Fabric</div>
+      <div class="value">130 TB/s</div>
+      <div class="note">all-to-all across 72 B200 GPUs in one rack</div>
+    </div>
+  </div>
+
+  <h3>The Crossbar Architecture — How It Works</h3>
+  <p>
+    The internal architecture of NVSwitch is deceptively simple at the concept level: an N×N fully-connected crossbar, where every input port is hardwired to every output port through a switching matrix. The guarantee is non-blocking — any two ports can transfer simultaneously without stealing bandwidth from any other pair.
+  </p>
+
+  <div class="diagram"><span class="dim">──── NVSwitch Internal Crossbar (conceptual) ────────────────────</span>
+
+ GPU 0 ──┬─────────────────────────────────────────────┐
+ GPU 1 ──┤  <span class="hi">  NVSwitch ASIC</span>                          │
+ GPU 2 ──┤  <span class="dim">┌───────────────────────────────────┐</span>     │
+ GPU 3 ──┼──<span class="dim">│</span>  <span class="green">18×18 Non-Blocking Crossbar</span>       <span class="dim">│</span>─────┤ ──► any GPU
+ GPU 4 ──┤  <span class="dim">│</span>  <span class="dim">Every port ↔ every port at full BW</span> <span class="dim">│</span>     │    at full NVLink
+ GPU 5 ──┤  <span class="dim">└───────────────────────────────────┘</span>     │    speed.
+ GPU 6 ──┤                                              │    No arbitration
+ GPU 7 ──┘─────────────────────────────────────────────┘    penalty.
+
+<span class="dim">──── DGX H100: 8 GPUs + 4× NVSwitch 3.0 chips ──────────────────</span>
+<span class="dim">  Each GPU → all 4 NVSwitch chips via NVLink 4.0</span>
+<span class="dim">  Result: 900 GB/s bisection BW per GPU, sustained</span>
+
+<span class="dim">──── GB200 NVL72: 72 GPUs + 9× NVSwitch tray boards ────────────</span>
+<span class="dim">  Each tray = dual NVSwitch 4.0 chips</span>
+<span class="dim">  Each GPU → 2 NVLink 5.0 links per tray board</span>
+  <span class="red">Result: 1.8 TB/s per GPU · 130 TB/s rack-wide fabric</span></div>
+
+  <h3>Generation-by-Generation NVSwitch Evolution</h3>
+  <div class="layer-stack">
+    <div class="layer-card">
+      <div class="layer-label">NVSwitch 1.0<br/>(V100 / DGX-2)</div>
+      <div class="layer-body"><strong>18 NVLink 2.0 ports</strong> · 25 GB/s per port · 900 GB/s aggregate · 12 chips per DGX-2 · First ASIC to make 8-GPU full mesh practical</div>
+    </div>
+    <div class="layer-card">
+      <div class="layer-label">NVSwitch 2.0<br/>(A100)</div>
+      <div class="layer-body"><strong>NVLink 3.0</strong> · 25 GB/s per link × 18 ports · Same 18×18 crossbar · Improved error detection, in-network compute (SHARP precursor) introduced</div>
+    </div>
+    <div class="layer-card">
+      <div class="layer-label">NVSwitch 3.0<br/>(H100 / H200)</div>
+      <div class="layer-body"><strong>NVLink 4.0</strong> · 50 GB/s per link · 4 chips on HGX baseboard · 900 GB/s per GPU · Supports 256-GPU theoretical domain · Commercial limit: 8 GPUs per node</div>
+    </div>
+    <div class="layer-card warn">
+      <div class="layer-label">NVSwitch 4.0<br/>(B200 / NVL72)</div>
+      <div class="layer-body"><strong>NVLink 5.0</strong> · 200 GB/s per port · 72-port chips · 14.4 TB/s per chip · 9 switch tray boards per rack · <strong>130 TB/s all-to-all, 72 GPUs act as one unified memory domain</strong></div>
+    </div>
+  </div>
+
+  <h2>Part II — NVLink: The Protocol Layer</h2>
+  <p>
+    NVLink is the physical + protocol layer. NVSwitch is the ASIC that implements it at scale. Think of NVLink as the language and NVSwitch as the postal system that routes it efficiently. Without NVSwitch, NVLink is a fast road between two cities. With NVSwitch, it becomes a national highway grid.
+  </p>
+
+  <div class="stat-row">
+    <div class="stat-cell">
+      <div class="label">NVLink 1.0 (Pascal · 2016)</div>
+      <div class="value">160 GB/s</div>
+      <div class="note">bidirectional per GPU</div>
+    </div>
+    <div class="stat-cell">
+      <div class="label">NVLink 4.0 (Hopper · 2022)</div>
+      <div class="value">900 GB/s</div>
+      <div class="note">per H100 GPU</div>
+    </div>
+    <div class="stat-cell">
+      <div class="label">NVLink 5.0 (Blackwell · 2024)</div>
+      <div class="value">1.8 TB/s</div>
+      <div class="note">per B200 GPU, 14× faster than PCIe 5.0</div>
+    </div>
+    <div class="stat-cell">
+      <div class="label">NVLink 6.0 (Rubin · 2026)</div>
+      <div class="value">260 TB/s</div>
+      <div class="note">rack-scale aggregate, roadmap target</div>
+    </div>
+  </div>
+
+  <h3>Key Architectural Properties of NVLink</h3>
+  <p>
+    Beyond raw bandwidth, what makes NVLink architecturally significant is <strong>cache coherence and unified memory semantics</strong>. A GPU on one end of an NVLink fabric can directly load from another GPU's HBM using the same load/store instructions it would use for local memory. For all-reduce and all-gather collectives — the bread and butter of distributed training — this is the difference between microseconds and milliseconds.
+  </p>
+
+  <div class="callout">
+    <div class="cl-head">The Architectural Insight</div>
+    <p>NVSwitch doesn't just move data faster. It preserves the NUMA memory model across 72 GPUs — making 13.5 TB of HBM in one GB200 NVL72 rack feel like one contiguous address space to the CUDA runtime. That is what NVLink + NVSwitch together create: a scale-up domain with load/store semantics, not a network.</p>
+  </div>
+
+  <h2>Part III — UALink: The Open Standard Challenge</h2>
+
+  <p>
+    In May 2024, a coalition of companies announced they were done waiting for NVIDIA to open its interconnect. The result: <strong class="ua">UALink — Ultra Accelerator Link</strong> — an open standard designed to do for GPU-to-GPU interconnect what Ethernet did for networking: commoditize the layer, expand the ecosystem, and eliminate single-vendor dependency.
+  </p>
+
+  <h3>Founding Members</h3>
+  <p>AMD, Broadcom, Cisco, Google, HPE, Intel, Meta, Microsoft — later joined by AWS, Apple, Alibaba Cloud, Synopsys, and 70+ organizations total. This is not a standards committee of also-rans. These are the hyperscalers and chip vendors that collectively decide what gets built next.</p>
+
+  <h3>UALink 1.0 Technical Specification (April 2025)</h3>
+  <div class="layer-stack">
+    <div class="layer-card open">
+      <div class="layer-label">Physical Layer</div>
+      <div class="layer-body"><strong>Modified Ethernet SerDes</strong> · IEEE P802.3dj compliant · 212.5 GT/s signal rate · 200 Gb/s effective per lane after encoding</div>
+    </div>
+    <div class="layer-card open">
+      <div class="layer-label">Port Config</div>
+      <div class="layer-body"><strong>x1, x2, x4 lane options</strong> · Max 800 Gb/s per port (4-lane) · Switch assigns one port per accelerator</div>
+    </div>
+    <div class="layer-card open">
+      <div class="layer-label">Scale</div>
+      <div class="layer-body"><strong>Up to 1,024 accelerators</strong> in a single shared memory pod — vs. NVLink's practical max of 72 (theoretical 576) · 10-bit unique identifiers for precise routing</div>
+    </div>
+    <div class="layer-card open">
+      <div class="layer-label">Protocol DNA</div>
+      <div class="layer-body"><strong>AMD's xGMI + Infinity Fabric semantics</strong> · Custom Data Layer + Transport Layer built on top of PCIe foundation, with Ethernet SerDes hardware · Not CXL, not raw PCIe</div>
+    </div>
+  </div>
+
+  <p>
+    The first commercial UALink hardware is expected from AMD, Intel, and Astera Labs in late 2026. AMD's Helios rack systems will tunnel UALink over conventional Ethernet switches initially — running the protocol while silicon partners finalize native UALink ASICs.
+  </p>
+
+  <h2>Part IV — Ultra Ethernet: Scale-Out, Not Scale-Up</h2>
+
+  <p>
+    Here's where people get confused: <strong class="eth">Ultra Ethernet</strong> is not a replacement for NVLink or UALink. It solves a different problem at a different layer.
+  </p>
+
+  <div class="callout">
+    <div class="cl-head">The Two-Fabric Model</div>
+    <p><strong>Scale-Up Fabric</strong> (within a rack or pod): NVLink/NVSwitch or UALink. High bandwidth, low latency, load/store memory semantics. This is where all-reduce happens.<br/><br/><strong>Scale-Out Fabric</strong> (rack-to-rack, datacenter-to-datacenter): InfiniBand today, Ultra Ethernet tomorrow. Message-passing semantics. This is where gradient synchronization happens across nodes.</p>
+  </div>
+
+  <p>
+    Ultra Ethernet Consortium — backed by many of the same players as UALink — is building enhanced Ethernet that competes with InfiniBand's low-latency, congestion-controlled capabilities for HPC and AI. Broadcom's Tomahawk Ultra ASIC (51.2 Tbps, nearly 2× NVLink switch bandwidth) represents their bet that Ethernet can do both jobs: scale-up and scale-out, eliminating the need for two separate fabric technologies.
+  </p>
+
+  <h2>Part V — The Full Comparison</h2>
+
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Dimension</th>
+        <th class="col-nv">NVLink + NVSwitch</th>
+        <th class="col-ua">UALink 1.0</th>
+        <th class="col-eth">Ultra Ethernet</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Role</td>
+        <td>Scale-up fabric within NVIDIA pod</td>
+        <td>Scale-up fabric, multi-vendor</td>
+        <td>Scale-out fabric, rack-to-rack</td>
+      </tr>
+      <tr>
+        <td>Semantics</td>
+        <td>Load/store, cache coherent NUMA</td>
+        <td>Load/store, cache coherent</td>
+        <td>Message-passing (not memory)</td>
+      </tr>
+      <tr>
+        <td>Bandwidth (latest)</td>
+        <td>1.8 TB/s per GPU (NVLink 5.0)</td>
+        <td>800 Gb/s per port (4-lane)</td>
+        <td>400–800 Gb/s per port</td>
+      </tr>
+      <tr>
+        <td>Max cluster size</td>
+        <td>72 GPUs commercial; 576 theoretical</td>
+        <td>1,024 accelerators per pod</td>
+        <td>Datacenter-scale (thousands)</td>
+      </tr>
+      <tr>
+        <td>Vendor support</td>
+        <td>NVIDIA only</td>
+        <td>AMD, Intel, custom ASICs</td>
+        <td>Broadcom, Arista, Intel, Cisco</td>
+      </tr>
+      <tr>
+        <td>Standard type</td>
+        <td>Proprietary</td>
+        <td>Open (consortium)</td>
+        <td>Open (consortium)</td>
+      </tr>
+      <tr>
+        <td>Hardware status</td>
+        <td>Production (NVL72 shipping)</td>
+        <td>Spec released Apr 2025; HW 2026</td>
+        <td>Broadcom TH-Ultra shipping 2025</td>
+      </tr>
+      <tr>
+        <td>Latency</td>
+        <td>Sub-microsecond within NVL72</td>
+        <td>100–150 ns target (switch)</td>
+        <td>~1–2 µs (vs IB ~600 ns)</td>
+      </tr>
+      <tr>
+        <td>Physical transport</td>
+        <td>NVLink SerDes (proprietary)</td>
+        <td>Modified Ethernet SerDes (IEEE)</td>
+        <td>Standard Ethernet PHY</td>
+      </tr>
+      <tr>
+        <td>Strategic purpose</td>
+        <td>Lock the stack, maximum performance</td>
+        <td>Break the lock, match performance</td>
+        <td>Unify scale-out on open standard</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Part VI — The War Timeline</h2>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-year">2018</div>
+      <div class="tl-title">NVSwitch 1.0 Ships with DGX-2</div>
+      <div class="tl-body">First crossbar switching ASIC for NVLink. 18×18 ports. 12 chips per DGX-2. The beginning of the scale-up moat.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">Dec 2023</div>
+      <div class="tl-title">AMD + Broadcom Announce xGMI on PCIe Switches</div>
+      <div class="tl-body">Seed moment. AMD's Infinity Fabric semantics on Broadcom Atlas switches. The coalition begins forming privately.</div>
+    </div>
+    <div class="tl-item open">
+      <div class="tl-year">May 2024</div>
+      <div class="tl-title">UALink Consortium Announced</div>
+      <div class="tl-body">8 founding members. AMD, Broadcom, Cisco, Google, HPE, Intel, Meta, Microsoft. Open challenge to NVSwitch at the architecture level.</div>
+    </div>
+    <div class="tl-item signal">
+      <div class="tl-year">2024 → 2025</div>
+      <div class="tl-title">GB200 NVL72 Ships / NVSwitch 4.0 Era Begins</div>
+      <div class="tl-body">130 TB/s all-to-all. 72 GPUs. 1.8 TB/s per GPU. NVIDIA extends its lead precisely while the open standard is still on paper.</div>
+    </div>
+    <div class="tl-item open">
+      <div class="tl-year">Apr 2025</div>
+      <div class="tl-title">UALink 1.0 Specification Published</div>
+      <div class="tl-body">200 GT/s per lane. 1,024-accelerator pod support. AMD's xGMI + Ethernet SerDes. Tape-out clock starts now — hardware 12–18 months out.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">Jul 2025</div>
+      <div class="tl-title">Broadcom Announces Scale-Up Ethernet (Tomahawk Ultra)</div>
+      <div class="tl-body">51.2 Tbps. Broadcom bets Ethernet can replace both InfiniBand and UALink. Pulls back from UALink hardware roadmap — while keeping consortium membership.</div>
+    </div>
+    <div class="tl-item open">
+      <div class="tl-year">Late 2026</div>
+      <div class="tl-title">First UALink Hardware Ships (Target)</div>
+      <div class="tl-body">AMD Helios, Intel Gaudi, Astera Labs switch silicon. First real-world test of whether the spec performs as promised at 1,024-accelerator scale.</div>
+    </div>
+    <div class="tl-item signal">
+      <div class="tl-year">2026 →</div>
+      <div class="tl-title">NVLink Fusion Opens NVIDIA Fabric</div>
+      <div class="tl-body">Qualcomm, Fujitsu, Marvell, MediaTek allowed into NVLink fabrics. NVIDIA hedges: remain dominant, but no longer purely closed. The moat gets a drawbridge.</div>
+    </div>
+  </div>
+
+  <h2>Part VII — Strategic Takeaway</h2>
+
+  <p>
+    The three technologies are not in a three-way race for the same prize. Each lives at a different layer of the data movement stack — and understanding that layering is what separates infrastructure architects from infrastructure operators.
+  </p>
+  <p>
+    NVIDIA built a vertical stack from silicon to software, and the NVSwitch crossbar is the keystone that makes it structurally sound. Every competitor's GPU is bounded at 8-GPU scale until they have an equivalent scale-up switching fabric. UALink is the industry's coordinated bet that they can build that equivalent — open, multi-vendor, at a fraction of the lock-in cost. Ultra Ethernet is the parallel bet that the scale-out problem (rack to rack) also belongs on open standards.
+  </p>
+  <p>
+    What makes 2026–2027 the inflection point: for the first time, the open standard will have shipping silicon. That's when the real comparison begins. Not spec sheets against production hardware — but production against production.
+  </p>
+
+  <div class="pull">
+    <p>"NVIDIA's advantage isn't just bandwidth. It's that NVSwitch makes 72 GPUs share memory like one machine. UALink's 1,024-accelerator ceiling looks impressive — until you ask whether the latency and coherence model hold at that scale."</p>
+  </div>
+
+  <div class="callout">
+    <div class="cl-head">The Question That Matters in 2026</div>
+    <p>Can UALink deliver load/store memory coherence at 1,024-accelerator scale with sub-150ns switch latency — consistently, in production, across multiple vendors' silicon — while NVIDIA ships NVLink 6.0 on Rubin with 260 TB/s rack-scale bandwidth? That answer will determine the interconnect landscape for the rest of the decade.</p>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-left">
+    © 2026 Fahad Najam Consulting<br/>
+    Fahad Najam<br/>
+    Silicon &amp; Soul · Infrastructure Intelligence<br/>
+    fahad-najam.com
+  </div>
+  <div class="footer-right">
+    This analysis reflects publicly available technical specifications and industry reporting as of June 2026. The author has direct deployment experience with NVIDIA H200 Superpod infrastructure, BlueField-3 DPUs, and Spectrum-X networking at scale.
+  </div>
+</footer>
+
+</body>
+</html>
