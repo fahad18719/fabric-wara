@@ -124,7 +124,8 @@ His frameworks — Energy-Aware Computing and Power-Thermal Aware Scheduling —
 
 Links
 
-Substack — Silicon & Soul: PASTE_SUBSTACK_ARTICLE_URL_HERE
+Substack — Silicon & Soul: 
+https://fahadnajam.substack.com/p/the-fabric-wars
 
 LinkedIn: https://www.linkedin.com/in/fahadnajam
 
