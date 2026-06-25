@@ -2,17 +2,29 @@ The Fabric Wars
 
 NVSwitch · NVLink · UALink · Ultra Ethernet
 
-Companion repository to the Fabric Wars article published on Substack.
+Companion repository to The Fabric Wars article published on Substack.
 
 Interactive visual explainer + hands-on PyCUDA code demonstrating how GPU interconnect actually works — from the crossbar ASIC to Unified Virtual Addressing — with measured bandwidth comparisons you can run yourself.
 
 ---
 
+Live Project Page
+
+The project page is hosted here:
+
+https://fahad18719.github.io/fabric-wara
+
+Use this page for the interactive visual explainer, code companion, and supporting material.
+
+---
+
 Live Demos
 
-Resource| What it covers
-"Interactive Visual Explainer" (https://fahad18719.github.io/fabric-wara/nvswitch-visuals.html)| Animated crossbar grid · NVSwitch generation evolution · GB200 NVL72 rack anatomy · Scale-up vs scale-out fabric
-"Code Companion — Show Me the Silicon" (https://fahad18719.github.io/fabric-wara/nvswitch-code-companion.html)| PyCUDA examples with live bandwidth simulators · PCIe vs NVLink vs UVA
+Resource| Link
+Interactive Visual Explainer| https://fahad18719.github.io/fabric-wara
+Code Companion — Show Me the Silicon| https://fahad18719.github.io/fabric-wara
+
+Note: The direct demo pages will be linked separately after GitHub Pages confirms the individual HTML files are deployed correctly.
 
 ---
 
@@ -108,8 +120,15 @@ Fahad Najam is a Principal AI Infrastructure Architect and founder of Fahad Naja
 
 His frameworks — Energy-Aware Computing and Power-Thermal Aware Scheduling — treat energy-per-token as a first-class infrastructure metric.
 
-→ "Substack — Silicon & Soul" (YOUR_SUBSTACK_URL)
-→ "LinkedIn" (https://www.linkedin.com/in/fahadnajam)
+---
+
+Links
+
+Substack — Silicon & Soul: PASTE_SUBSTACK_ARTICLE_URL_HERE
+
+LinkedIn: https://www.linkedin.com/in/fahadnajam
+
+Project page: https://fahad18719.github.io/fabric-wara
 
 ---
 
